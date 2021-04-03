@@ -4,6 +4,13 @@ import styled from "styled-components"
 import spinner from "./spinner.svg"
 
 const StyledWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+`
+
+const StyledImg = styled.img`
 	width: 80px;
 	height: 80px;
 
@@ -18,10 +25,11 @@ const StyledWrapper = styled.div`
 	}
 `
 
-const Spinner = () => {
+const Spinner = ({ error }) => {
 	return (
 		<StyledWrapper>
-			<img src={spinner} alt="" />
+			<StyledImg src={spinner} alt="" />
+			{error ? <div>{error}</div> : <></>}
 		</StyledWrapper>
 	)
 }

@@ -170,7 +170,6 @@ function App() {
 						console.log("weather", result)
 					}
 					console.log(`current weather API called once!`)
-					setWeatherLoaded(true)
 				})
 		}
 		const fetchForecastData = () => {
@@ -187,7 +186,6 @@ function App() {
 						console.log("forecast", result)
 					}
 					console.log(`weather forecast API called once!`)
-					setForecastLoaded(true)
 				})
 		}
 
@@ -199,12 +197,16 @@ function App() {
 				console.log("lat and lon loaded, calling API")
 				fetchForecastData()
 				fetchWeatherData()
+				setWeatherLoaded(true)
+				setForecastLoaded(true)
 			} else {
 				console.log("need both coordinates")
 			}
 		} else if (forceRefetch) {
 			fetchForecastData()
 			fetchWeatherData()
+			setWeatherLoaded(true)
+			setForecastLoaded(true)
 		} else {
 			if (
 				JSON.parse(localStorage.getItem("forecastData")).cod === "200" &&
@@ -213,20 +215,22 @@ function App() {
 				if (
 					Date.now() -
 						JSON.parse(localStorage.getItem("weatherData")).dt * 1000 >
-					7200000
+					1000 * 60 * 60 * 2
 				) {
 					if (latLoaded && lonLoaded) {
 						console.log("data age > 2 hours")
 						console.log("lat and lon loaded, calling API")
 						fetchWeatherData()
 						fetchForecastData()
+						setWeatherLoaded(true)
+						setForecastLoaded(true)
 					} else {
 						console.log("need both coordinates")
 					}
 				} else {
 					setWeatherData(JSON.parse(localStorage.getItem("weatherData")))
-					setWeatherLoaded(true)
 					setForecastData(JSON.parse(localStorage.getItem("forecastData")))
+					setWeatherLoaded(true)
 					setForecastLoaded(true)
 				}
 			} else {
@@ -277,10 +281,9 @@ function App() {
 						forecastData={forecastData}
 						weatherData={weatherData}
 					/>
-					{error ? <div>{error}</div> : <></>}
 				</StyledContainer>
 			) : (
-				<Spinner />
+				<Spinner error={error} />
 			)}
 		</>
 	)

@@ -240,7 +240,10 @@ const CurrentWeather = ({
 			</StyledInfoCol>
 			<StyledInfoCol>
 				<div>
-					<FontAwesomeIcon icon={faLongArrowAltDown} title="Pressure" />{" "}
+					<FontAwesomeIcon
+						icon={faLongArrowAltDown}
+						title="Atmospheric pressure"
+					/>{" "}
 					Pressure: {item.pressure}hPa
 				</div>
 				<div>
@@ -248,12 +251,13 @@ const CurrentWeather = ({
 					{item.visibility}km
 				</div>
 				<div>
-					<FontAwesomeIcon icon={faWind} title="Wind" /> Wind: {item.windSpeed}
+					<FontAwesomeIcon icon={faWind} title="Wind speed/direction" /> Wind:{" "}
+					{item.windSpeed}
 					m/s{" "}
 					<FontAwesomeIcon
 						icon={faArrowAltCircleDown}
 						transform={{ rotate: item.windDeg }}
-						title="Wind Direction"
+						title="Wind direction"
 					/>
 				</div>
 				<div>

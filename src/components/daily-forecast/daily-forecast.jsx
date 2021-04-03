@@ -39,15 +39,19 @@ const DailyForecast = ({ daysArray, convertDate, iconURL }) => {
 
 		let result = {
 			clouds: Math.round(cloudsSum / daysArray[i].length),
-			date: daysArray[i][0].dt,
-			description: daysArray[i][0].weather[0].description,
+			date: daysArray[i][Math.ceil(daysArray[i].length / 2)].dt,
+			description:
+				daysArray[i][Math.ceil(daysArray[i].length / 2)].weather[0].description,
 			image:
-				daysArray[i][0].weather[0].icon.substring(
+				daysArray[i][
+					Math.ceil(daysArray[i].length / 2)
+				].weather[0].icon.substring(
 					0,
-					daysArray[i][0].weather[0].icon.length - 1
+					daysArray[i][Math.ceil(daysArray[i].length / 2)].weather[0].icon
+						.length - 1
 				) + "d",
 			pop: Math.round((popSum / daysArray[i].length) * 100),
-			main: daysArray[i][0].weather[0].main,
+			main: daysArray[i][Math.ceil(daysArray[i].length / 2)].weather[0].main,
 			temp: Math.round(tempSum / daysArray[i].length),
 		}
 
