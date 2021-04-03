@@ -3,8 +3,8 @@
 	"name": "Weather App",
 	"icons": [
 		{
-			"src": "favicon.svg",
-			"sizes": "64x64 32x32 24x24 16x16",
+			"src": "favicon.ico",
+			"sizes": "48x48",
 			"type": "image/x-icon"
 		},
 		{
@@ -35,5 +35,6 @@
 	"start_url": ".",
 	"display": "standalone",
 	"orientation": "portrait",
-	"background_color": "#fff"
+	"background_color": "#ffffff",
+	"theme_color": "#ffffff"
 }
