@@ -14,6 +14,8 @@ const StyledImg = styled.img`
 	width: 80px;
 	height: 80px;
 
+	margin: 32px;
+
 	stroke: #ccc;
 
 	animation: spin 1s linear infinite;
@@ -25,11 +27,30 @@ const StyledImg = styled.img`
 	}
 `
 
+const StyledError = styled.div`
+	text-align: center;
+
+	span {
+		text-decoration: underline;
+		cursor: pointer;
+	}
+`
+
 const Spinner = ({ error }) => {
 	return (
 		<StyledWrapper>
 			<StyledImg src={spinner} alt="" />
-			{error ? <div>{error}</div> : <></>}
+			{error ? (
+				<StyledError>
+					<div>{error}</div>
+					<div>
+						You may need to{" "}
+						<span onClick={window.location.reload}>refresh</span> this page.
+					</div>
+				</StyledError>
+			) : (
+				<></>
+			)}
 		</StyledWrapper>
 	)
 }

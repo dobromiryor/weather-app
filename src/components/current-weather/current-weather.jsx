@@ -43,10 +43,6 @@ const StyledContainer = styled.div`
 		grid-template-rows: auto 1fr 1fr;
 	}
 
-	// Medium devices (tablets, 768px and up)
-	@media (min-width: 768px) {
-	}
-
 	// Large devices (desktops, 992px and up)
 	@media (min-width: 992px) {
 		grid-template-columns: 1fr 1fr;
@@ -61,14 +57,6 @@ const StyledTopRow = styled.div`
 	// Small devices (landscape phones, 576px and up)
 	@media (min-width: 576px) {
 		grid-column: span 2;
-	}
-
-	// Medium devices (tablets, 768px and up)
-	@media (min-width: 768px) {
-	}
-
-	// Large devices (desktops, 992px and up)
-	@media (min-width: 992px) {
 	}
 `
 
@@ -103,10 +91,6 @@ const StyledConditions = styled.div`
 	// Small devices (landscape phones, 576px and up)
 	@media (min-width: 576px) {
 		grid-column: span 2;
-	}
-
-	// Medium devices (tablets, 768px and up)
-	@media (min-width: 768px) {
 	}
 
 	// Large devices (desktops, 992px and up)

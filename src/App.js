@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react"
-import "./App.css"
 import styled, { createGlobalStyle } from "styled-components"
 
 import Spinner from "./components/spinner/spinner.jsx"
@@ -135,10 +134,8 @@ function App() {
 	// Force data refetch
 	const forceRefresh = () => {
 		setForceRefetch(true)
-		console.log(`1 refresh per 5 min`)
 		setTimeout(() => {
 			setForceRefetch(false)
-			console.log(`refresh timer finished`)
 			clearTimeout()
 		}, 300000)
 	}
@@ -167,9 +164,7 @@ function App() {
 					} else {
 						setWeatherData(result)
 						localStorage.setItem("weatherData", JSON.stringify(result))
-						console.log("weather", result)
 					}
-					console.log(`current weather API called once!`)
 				})
 		}
 		const fetchForecastData = () => {
@@ -183,9 +178,7 @@ function App() {
 					} else {
 						setForecastData(result)
 						localStorage.setItem("forecastData", JSON.stringify(result))
-						console.log("forecast", result)
 					}
-					console.log(`weather forecast API called once!`)
 				})
 		}
 
@@ -194,13 +187,15 @@ function App() {
 			localStorage.getItem("forecastData") === null
 		) {
 			if (latLoaded && lonLoaded) {
-				console.log("lat and lon loaded, calling API")
 				fetchForecastData()
 				fetchWeatherData()
 				setWeatherLoaded(true)
 				setForecastLoaded(true)
+				setError()
 			} else {
-				console.log("need both coordinates")
+				setError(
+					"Need both coordinates to fetch weather data. Please allow location access."
+				)
 			}
 		} else if (forceRefetch) {
 			fetchForecastData()
@@ -218,14 +213,15 @@ function App() {
 					1000 * 60 * 60 * 2
 				) {
 					if (latLoaded && lonLoaded) {
-						console.log("data age > 2 hours")
-						console.log("lat and lon loaded, calling API")
 						fetchWeatherData()
 						fetchForecastData()
 						setWeatherLoaded(true)
 						setForecastLoaded(true)
+						setError()
 					} else {
-						console.log("need both coordinates")
+						setError(
+							"Need both coordinates to fetch weather data. Please allow location access."
+						)
 					}
 				} else {
 					setWeatherData(JSON.parse(localStorage.getItem("weatherData")))
@@ -234,16 +230,6 @@ function App() {
 					setForecastLoaded(true)
 				}
 			} else {
-				console.log(
-					"weather error",
-					JSON.parse(localStorage.getItem("weatherData")).cod,
-					JSON.parse(localStorage.getItem("weatherData")).message
-				)
-				console.log(
-					"forecast error",
-					JSON.parse(localStorage.getItem("forecastData")).cod,
-					JSON.parse(localStorage.getItem("forecastData")).message
-				)
 				setError(`weather error: ${
 					JSON.parse(localStorage.getItem("weatherData")).message
 				}
@@ -252,8 +238,6 @@ function App() {
 					}`)
 			}
 		}
-
-		console.log("effect ran once!")
 	}, [
 		API_KEY,
 		API_URL,
