@@ -35,16 +35,19 @@
 
 		<script>
 			const manifest = document.getElementById("manifest")
+			const background = document.querySelector("html")
 			const usesDarkMode =
 				window.matchMedia("(prefers-color-scheme: dark)").matches || false
 
 			const switchManifest = (usesDarkMode) => {
 				if (usesDarkMode) {
 					manifest.href = "%PUBLIC_URL%/manifestDark.json"
+					background.style.backgroundColor = "#222222"
 					theme.content = "#222222"
 				} else {
 					manifest.href = "%PUBLIC_URL%/manifest.json"
 					theme.content = "#ffffff"
+					background.style.backgroundColor = "#ffffff"
 				}
 			}
 

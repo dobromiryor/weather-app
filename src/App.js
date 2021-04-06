@@ -183,8 +183,8 @@ function App() {
 		}
 
 		if (
-			localStorage.getItem("weatherData") === null ||
-			localStorage.getItem("forecastData") === null
+			!localStorage.hasOwnProperty("weatherData") ||
+			!localStorage.hasOwnProperty("forecastData")
 		) {
 			if (latLoaded && lonLoaded) {
 				fetchForecastData()
@@ -220,7 +220,7 @@ function App() {
 						setError()
 					} else {
 						setError(
-							"Need both coordinates to fetch weather data. Please allow location access."
+							"This app needs your coordinates to fetch weather data. Please allow location access."
 						)
 					}
 				} else {

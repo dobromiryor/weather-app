@@ -26,12 +26,15 @@ const StyledDiv = styled.div`
 
 const DailyForecast = ({ daysArray, convertDate, iconURL }) => {
 	let dailyArray = []
-
-	for (let i = 1; i < 6; i++) {
+	for (let i = 1; i < 5; i++) {
 		let cloudsSum = 0
 		let popSum = 0
 		let tempSum = 0
+		let mid = Math.ceil(daysArray[i].length / 2)
 		for (let j = 0; j < daysArray[i].length; j++) {
+			if (!daysArray[i][j].dt) {
+				window.location.reload()
+			}
 			cloudsSum += daysArray[i][j].clouds.all
 			popSum += daysArray[i][j].pop
 			tempSum += daysArray[i][j].main.temp
@@ -39,19 +42,15 @@ const DailyForecast = ({ daysArray, convertDate, iconURL }) => {
 
 		let result = {
 			clouds: Math.round(cloudsSum / daysArray[i].length),
-			date: daysArray[i][Math.ceil(daysArray[i].length / 2)].dt,
-			description:
-				daysArray[i][Math.ceil(daysArray[i].length / 2)].weather[0].description,
+			date: daysArray[i][mid].dt,
+			description: daysArray[i][mid].weather[0].description,
 			image:
-				daysArray[i][
-					Math.ceil(daysArray[i].length / 2)
-				].weather[0].icon.substring(
+				daysArray[i][mid].weather[0].icon.substring(
 					0,
-					daysArray[i][Math.ceil(daysArray[i].length / 2)].weather[0].icon
-						.length - 1
+					daysArray[i][mid].weather[0].icon.length - 1
 				) + "d",
 			pop: Math.round((popSum / daysArray[i].length) * 100),
-			main: daysArray[i][Math.ceil(daysArray[i].length / 2)].weather[0].main,
+			main: daysArray[i][mid].weather[0].main,
 			temp: Math.round(tempSum / daysArray[i].length),
 		}
 

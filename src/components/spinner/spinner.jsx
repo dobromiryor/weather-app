@@ -37,6 +37,10 @@ const StyledError = styled.div`
 `
 
 const Spinner = ({ error }) => {
+	const reloadPage = () => {
+		window.location.reload()
+	}
+
 	return (
 		<StyledWrapper>
 			<StyledImg src={spinner} alt="" />
@@ -44,8 +48,7 @@ const Spinner = ({ error }) => {
 				<StyledError>
 					<div>{error}</div>
 					<div>
-						You may need to{" "}
-						<span onClick={window.location.reload}>refresh</span> this page.
+						You may need to <span onClick={reloadPage}>refresh</span> this page.
 					</div>
 				</StyledError>
 			) : (
