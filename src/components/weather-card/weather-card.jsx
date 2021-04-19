@@ -1,11 +1,9 @@
 import React from "react"
-import styled from "styled-components"
 
 import CurrentWeather from "../current-weather/current-weather.jsx"
 import HourlyForecast from "../hourly-forecast/hourly-forecast.jsx"
 import DailyForecast from "../daily-forecast/daily-forecast.jsx"
-
-const StyledWrapper = styled.div``
+import SearchForm from "../search-form/search-form.jsx"
 
 const WeatherCard = ({
 	convertDate,
@@ -13,6 +11,10 @@ const WeatherCard = ({
 	forceRefetch,
 	forceRefresh,
 	forecastData,
+	handleLocationWeatherData,
+	getCityWeatherData,
+	query,
+	setQuery,
 	weatherData,
 }) => {
 	const ICON_URL = process.env.REACT_APP_WEATHER_ICON_URL
@@ -35,7 +37,13 @@ const WeatherCard = ({
 	}
 
 	return (
-		<StyledWrapper>
+		<>
+			<SearchForm
+				handleLocationWeatherData={handleLocationWeatherData}
+				getCityWeatherData={getCityWeatherData}
+				query={query}
+				setQuery={setQuery}
+			/>
 			<CurrentWeather
 				convertDate={convertDate}
 				convertTime={convertTime}
@@ -55,7 +63,7 @@ const WeatherCard = ({
 				daysArray={daysArray}
 				iconURL={ICON_URL}
 			/>
-		</StyledWrapper>
+		</>
 	)
 }
 

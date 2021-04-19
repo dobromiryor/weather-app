@@ -5,10 +5,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
 	faArrowAltCircleDown,
 	faBinoculars,
+	faMapMarked,
 	faClock,
 	faCloud,
 	faLongArrowAltDown,
-	faMapMarkerAlt,
 	faMoon,
 	faSun,
 	faSyncAlt,
@@ -60,6 +60,10 @@ const StyledTopRow = styled.div`
 	}
 `
 
+const StyledCity = styled.span`
+	margin-left: 4px;
+`
+
 const RightContainer = styled.div`
 	display: flex;
 `
@@ -77,9 +81,11 @@ const StyledRefreshButton = styled.div`
 
 	cursor: pointer;
 	pointer-events: initial;
+	transition: 1s ease-in-out;
 
 	opacity: ${(props) => (props.disabled ? "0.1" : "1")};
 	pointer-events: ${(props) => (props.disabled ? "none" : "auto")};
+	transform: ${(props) => (props.disabled ? "rotate(360deg)" : "rotate(0deg)")};
 `
 
 const StyledConditions = styled.div`
@@ -119,7 +125,7 @@ const StyledInfoCol = styled.div`
 	// Medium devices (tablets, 768px and up)
 	@media (min-width: 768px) {
 		justify-content: center;
-		align-items: unset;
+		align-items: initial;
 		min-width: 256px;
 	}
 
@@ -173,8 +179,10 @@ const CurrentWeather = ({
 		<StyledContainer>
 			<StyledTopRow>
 				<div>
-					<FontAwesomeIcon icon={faMapMarkerAlt} title="Location" />{" "}
-					{weatherData.name},{weatherData.sys.country}
+					<FontAwesomeIcon icon={faMapMarked} title="Location" />
+					<StyledCity>
+						{weatherData.name},{weatherData.sys.country}
+					</StyledCity>
 				</div>
 				<RightContainer title={forceRefetch ? "Next refresh in 5 min" : ""}>
 					<div>

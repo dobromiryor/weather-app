@@ -1,116 +1,22 @@
 import React, { useEffect, useState } from "react"
-import styled, { createGlobalStyle } from "styled-components"
+import axios from "axios"
 
-import Spinner from "./components/spinner/spinner.jsx"
+import { GlobalStyle, StyledContainer } from "./App.styles"
+
 import WeatherCard from "./components/weather-card/weather-card.jsx"
-
-const GlobalStyle = createGlobalStyle`
-  html {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    min-height: 100%;
-
-    background-color: var(--background);
-    color: var(--text);
-
-    :root{
-      --border-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.1),
-		0px 0px 0px 1px rgba(0, 0, 0, 0.15);
-      --small-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.15),
-			0px 4px 8px -4px rgba(0, 0, 0, 0.5);
-      --big-shadow: 0px 0px 32px 0px rgba(0, 0, 0, 0.15),
-			0px 8px 24px -8px rgba(0, 0, 0, 0.5);
-    }
-
-    // Light theme
-    @media (prefers-color-scheme: light) {
-      :root {
-        --text: #333;
-        --background: #fff;
-      }
-    }
-    // Dark theme
-    @media (prefers-color-scheme: dark) {
-      :root{
-        --text: #ccc;
-        --background: #222;
-      }
-
-      background-color: var(--background);
-      color: var(--text);
-    }
-  }
-
-  body {
-    width: 100%;
-
-    margin: 0;
-
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-      sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-
-    // Medium devices (tablets, 768px and up)
-    @media (min-width: 768px) {
-      width: unset;
-    }
-  }
-
-  #root{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-`
-
-const StyledContainer = styled.div`
-	margin: 0px;
-	padding: 8px;
-
-	width: 100%;
-
-	border-radius: 8px;
-	box-shadow: var(--big-shadow);
-
-	transition: 0.2s ease;
-
-	// Small devices (landscape phones, 576px and up)
-	@media (min-width: 576px) {
-		margin: 32px;
-	}
-
-	// Medium devices (tablets, 768px and up)
-	@media (min-width: 768px) {
-		max-width: 768px;
-	}
-
-	// Large devices (desktops, 992px and up)
-	@media (min-width: 992px) {
-		width: unset;
-		max-width: 992px;
-	}
-`
+import SearchForm from "./components/search-form/search-form"
+import SpinningLogo from "./components/spinning-logo/spinning-logo"
 
 function App() {
-	const [error, setError] = useState(null)
-	const [lat, setLat] = useState()
-	const [latLoaded, setLatLoaded] = useState(false)
-	const [lon, setLon] = useState()
-	const [lonLoaded, setLonLoaded] = useState(false)
+	const [query, setQuery] = useState("")
 	const [weatherData, setWeatherData] = useState([])
-	const [weatherLoaded, setWeatherLoaded] = useState(false)
 	const [forecastData, setForecastData] = useState([])
-	const [forecastLoaded, setForecastLoaded] = useState(false)
 	const [forceRefetch, setForceRefetch] = useState(false)
 
 	const API_URL = process.env.REACT_APP_WEATHER_API_URL
 	const API_KEY = process.env.REACT_APP_WEATHER_API_KEY
 
-	// Format to 00:00
+	// Format to hh:mm
 	const convertTime = (time) => {
 		const timeOptions = {
 			hour12: false,
@@ -133,6 +39,7 @@ function App() {
 
 	// Force data refetch
 	const forceRefresh = () => {
+		handleLocationWeatherData()
 		setForceRefetch(true)
 		setTimeout(() => {
 			setForceRefetch(false)
@@ -140,122 +47,125 @@ function App() {
 		}, 300000)
 	}
 
-	// Get weather data
-	useEffect(() => {
-		navigator.geolocation.getCurrentPosition(function (position) {
-			// Get latitude
-			setLat(position.coords.latitude)
-			setLatLoaded(true)
-			// Get longitude
-			setLon(position.coords.longitude)
-			setLonLoaded(true)
-		})
-	})
-
-	useEffect(() => {
-		const fetchWeatherData = () => {
-			fetch(
-				`${API_URL}/weather/?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`
-			)
-				.then((res) => res.json())
-				.then((result) => {
-					if (result.cod !== 200) {
-						setError(result.message)
-					} else {
-						setWeatherData(result)
-						localStorage.setItem("weatherData", JSON.stringify(result))
-					}
+	// Fetch weather data by query
+	const getCityWeatherData = () => {
+		axios
+			.all([
+				axios.get(
+					`${API_URL}/weather/?q=${query}&units=metric&appid=${API_KEY}`
+				),
+				axios.get(
+					`${API_URL}/forecast?q=${query}&units=metric&appid=${API_KEY}`
+				),
+			])
+			.then(
+				axios.spread((...responses) => {
+					setWeatherData(responses[0].data)
+					setForecastData(responses[1].data)
 				})
-		}
-		const fetchForecastData = () => {
-			fetch(
-				`${API_URL}/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`
 			)
-				.then((res) => res.json())
-				.then((result) => {
-					if (result.cod !== "200") {
-						setError(result.message)
-					} else {
-						setForecastData(result)
-						localStorage.setItem("forecastData", JSON.stringify(result))
-					}
-				})
-		}
-
-		if (
-			!localStorage.hasOwnProperty("weatherData") ||
-			!localStorage.hasOwnProperty("forecastData")
-		) {
-			if (latLoaded && lonLoaded) {
-				fetchForecastData()
-				fetchWeatherData()
-				setWeatherLoaded(true)
-				setForecastLoaded(true)
-				setError()
-			} else {
-				setError(
-					"Need both coordinates to fetch weather data. Please allow location access."
-				)
-			}
-		} else if (forceRefetch) {
-			fetchForecastData()
-			fetchWeatherData()
-			setWeatherLoaded(true)
-			setForecastLoaded(true)
-		} else {
-			if (
-				JSON.parse(localStorage.getItem("forecastData")).cod === "200" &&
-				JSON.parse(localStorage.getItem("weatherData")).cod === 200
-			) {
-				if (
-					Date.now() -
-						JSON.parse(localStorage.getItem("weatherData")).dt * 1000 >
-					1000 * 60 * 60 * 2
-				) {
-					if (latLoaded && lonLoaded) {
-						fetchWeatherData()
-						fetchForecastData()
-						setWeatherLoaded(true)
-						setForecastLoaded(true)
-						setError()
-					} else {
-						setError(
-							"This app needs your coordinates to fetch weather data. Please allow location access."
+			.catch((error) => {
+				if (error.response) {
+					if (error.response.status === 404) {
+						alert(
+							"City not found. Please enter valid city name and/or two letter country code separated by coma. (e.g. Plovdiv, BG)"
 						)
 					}
+					console.log(error.response.data.message)
 				} else {
-					setWeatherData(JSON.parse(localStorage.getItem("weatherData")))
-					setForecastData(JSON.parse(localStorage.getItem("forecastData")))
-					setWeatherLoaded(true)
-					setForecastLoaded(true)
+					console.log(error)
 				}
+			})
+	}
+
+	// Fetch weather data by location
+	const getLocationWeatherData = (lat, lon) => {
+		axios
+			.all([
+				axios.get(
+					`${API_URL}/weather/?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`
+				),
+				axios.get(
+					`${API_URL}/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`
+				),
+			])
+			.then(
+				axios.spread((...responses) => {
+					setWeatherData(responses[0].data)
+					setForecastData(responses[1].data)
+					localStorage.setItem("weatherData", JSON.stringify(responses[0].data))
+					localStorage.setItem(
+						"forecastData",
+						JSON.stringify(responses[1].data)
+					)
+				})
+			)
+			.catch((error) => {
+				if (error.response) {
+					console.log(error.response.data.message)
+				} else {
+					console.log(error)
+				}
+			})
+	}
+
+	// Get location
+	const getLocation = (options) => {
+		return new Promise((resolve, reject) => {
+			navigator.geolocation.getCurrentPosition(resolve, reject, options)
+		})
+	}
+
+	const handleLocationWeatherData = () => {
+		getLocation()
+			.then((position) => {
+				getLocationWeatherData(
+					position.coords.latitude,
+					position.coords.longitude
+				)
+			})
+			.catch((error) => {
+				if (error.code === 1) {
+					alert(
+						"To use your geolocation please allow location permission on your device."
+					)
+				} else if (error.code === 2) {
+					alert(
+						"Geolocation failed because one or several internal sources of position returned an internal error."
+					)
+				} else if (error.code === 3) {
+					alert("Geolocation timed out.")
+				}
+				console.log(error.message)
+			})
+	}
+
+	useEffect(() => {
+		if (
+			localStorage.hasOwnProperty("weatherData") ||
+			localStorage.hasOwnProperty("forecastData")
+		) {
+			// local storage data found
+			if (
+				Date.now() - JSON.parse(localStorage.getItem("weatherData")).dt * 1000 >
+				1000 * 60 * 60 * 1
+			) {
+				// data is stale and will be updated
+				handleLocationWeatherData()
 			} else {
-				setError(`weather error: ${
-					JSON.parse(localStorage.getItem("weatherData")).message
-				}
-          forecast error: ${
-						JSON.parse(localStorage.getItem("forecastData")).message
-					}`)
+				// data is up to date and can be set to state
+				setWeatherData(JSON.parse(localStorage.getItem("weatherData")))
+				setForecastData(JSON.parse(localStorage.getItem("forecastData")))
 			}
 		}
-	}, [
-		API_KEY,
-		API_URL,
-		lon,
-		lat,
-		latLoaded,
-		lonLoaded,
-		weatherData.dt,
-		forceRefetch,
-	])
+
+		// eslint-disable-next-line
+	}, [])
 
 	return (
 		<>
 			<GlobalStyle />
-			{weatherLoaded &&
-			weatherData.cod === 200 &&
-			forecastLoaded &&
-			forecastData.cod === "200" ? (
+			{weatherData.cod === 200 && forecastData.cod === "200" ? (
 				<StyledContainer>
 					<WeatherCard
 						convertDate={convertDate}
@@ -263,11 +173,23 @@ function App() {
 						forceRefetch={forceRefetch}
 						forceRefresh={forceRefresh}
 						forecastData={forecastData}
+						handleLocationWeatherData={handleLocationWeatherData}
+						getCityWeatherData={getCityWeatherData}
+						query={query}
+						setQuery={setQuery}
 						weatherData={weatherData}
 					/>
 				</StyledContainer>
 			) : (
-				<Spinner error={error} />
+				<StyledContainer>
+					<SearchForm
+						handleLocationWeatherData={handleLocationWeatherData}
+						getCityWeatherData={getCityWeatherData}
+						query={query}
+						setQuery={setQuery}
+					/>
+					<SpinningLogo />
+				</StyledContainer>
 			)}
 		</>
 	)
