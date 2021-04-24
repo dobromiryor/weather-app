@@ -9,19 +9,20 @@ import {
 } from "./search-form.styles"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faSearch, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons"
+import { faSearch, faLocationArrow } from "@fortawesome/free-solid-svg-icons"
 
 const SearchForm = ({
 	getCityWeatherData,
 	handleLocationWeatherData,
 	query,
+	setLastQuery,
 	setQuery,
 }) => {
 	const handleSubmit = (e) => {
 		e.preventDefault()
 		getCityWeatherData(query)
+		setLastQuery(query)
 		setQuery("")
-		document.getElementsByName("city")[0].value = ""
 	}
 
 	return (
@@ -29,8 +30,13 @@ const SearchForm = ({
 			{localStorage.hasOwnProperty("weatherData") ? (
 				<></>
 			) : (
-				<LocationButton onClick={handleLocationWeatherData} type="button">
-					<FontAwesomeIcon icon={faMapMarkerAlt} title="My Location" />
+				<LocationButton
+					onClick={handleLocationWeatherData}
+					type="button"
+					title="Use my Location"
+					aria-label="Use my location"
+				>
+					<FontAwesomeIcon icon={faLocationArrow} />
 				</LocationButton>
 			)}
 			<StyledInputContainer>
@@ -41,11 +47,11 @@ const SearchForm = ({
 					required
 				/>
 				<StyledLabel htmlFor="city" className={query.length ? "shrink" : ""}>
-					Search city
+					Enter city name
 				</StyledLabel>
 			</StyledInputContainer>
-			<button type="submit">
-				<FontAwesomeIcon icon={faSearch} title="Search" />
+			<button type="submit" title="Search" aria-label="Search">
+				<FontAwesomeIcon icon={faSearch} />
 			</button>
 		</SearchFormContainer>
 	)

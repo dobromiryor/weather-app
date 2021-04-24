@@ -3,16 +3,41 @@ import styled from "styled-components"
 
 import ItemCard from "../item-card/item-card.jsx"
 
-const StyledDiv = styled.div`
-	display: grid;
-	grid-template-columns: initial;
-	grid-template-rows: repeat(4, 1fr);
+const DailyContainer = styled.section`
+	display: flex;
+	flex-direction: column;
 
-	margin: 0;
-	padding: 0;
+	padding: 16px;
+	margin: 8px;
+
+	border-radius: 4px;
+	box-shadow: var(--border-shadow);
+
+	transition: 0.2s ease;
+
+	&:hover {
+		box-shadow: var(--mid-shadow);
+	}
+`
+
+const StyledH3 = styled.h3`
+	align-self: center;
+	margin: 0 0 16px 0;
+`
+
+const DailyList = styled.div`
+	overflow: scroll auto;
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	grid-template-rows: initial;
+	grid-gap: 16px;
+
+	margin: -8px;
+	padding: 8px;
 
 	// Small devices (landscape phones, 576px and up)
 	@media (min-width: 576px) {
+		overflow: initial;
 		grid-template-rows: repeat(2, 1fr);
 		grid-template-columns: repeat(2, 1fr);
 	}
@@ -58,16 +83,19 @@ const DailyForecast = ({ daysArray, convertDate, iconURL }) => {
 	}
 
 	return (
-		<StyledDiv>
-			{dailyArray.slice(0, 4).map((item, index) => (
-				<ItemCard
-					key={index}
-					timeOrDate={convertDate}
-					item={item}
-					iconURL={iconURL}
-				/>
-			))}
-		</StyledDiv>
+		<DailyContainer>
+			<StyledH3>Next 4 days</StyledH3>
+			<DailyList>
+				{dailyArray.slice(0, 4).map((item, index) => (
+					<ItemCard
+						key={index}
+						timeOrDate={convertDate}
+						item={item}
+						iconURL={iconURL}
+					/>
+				))}
+			</DailyList>
+		</DailyContainer>
 	)
 }
 

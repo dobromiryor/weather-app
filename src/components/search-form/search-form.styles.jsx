@@ -1,8 +1,8 @@
 import styled, { css } from "styled-components"
 
 const shrinkLabelStyles = css`
-	font-size: 0.5em;
-	transform: translateX(1px) translateY(-8px);
+	font-size: 0.7em;
+	transform: translateX(1px) translateY(-13px);
 `
 
 export const SearchFormContainer = styled.form`
@@ -11,7 +11,7 @@ export const SearchFormContainer = styled.form`
 	align-items: center;
 
 	margin: 8px;
-	padding: 8px;
+	padding: 16px;
 
 	box-shadow: var(--border-shadow);
 	border-radius: 4px;
@@ -19,7 +19,7 @@ export const SearchFormContainer = styled.form`
 	transition: 0.2s ease;
 
 	&:hover {
-		box-shadow: var(--small-shadow);
+		box-shadow: var(--mid-shadow);
 	}
 
 	&:focus-within {

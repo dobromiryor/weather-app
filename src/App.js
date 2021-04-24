@@ -9,6 +9,7 @@ import SpinningLogo from "./components/spinning-logo/spinning-logo"
 
 function App() {
 	const [query, setQuery] = useState("")
+	const [lastQuery, setLastQuery] = useState("myLocation")
 	const [weatherData, setWeatherData] = useState([])
 	const [forecastData, setForecastData] = useState([])
 	const [forceRefetch, setForceRefetch] = useState(false)
@@ -39,7 +40,12 @@ function App() {
 
 	// Force data refetch
 	const forceRefresh = () => {
-		handleLocationWeatherData()
+		if (lastQuery === "myLocation") {
+			handleLocationWeatherData()
+		} else {
+			getCityWeatherData(lastQuery)
+			console.log(lastQuery, query)
+		}
 		setForceRefetch(true)
 		setTimeout(() => {
 			setForceRefetch(false)
@@ -48,7 +54,7 @@ function App() {
 	}
 
 	// Fetch weather data by query
-	const getCityWeatherData = () => {
+	const getCityWeatherData = (query) => {
 		axios
 			.all([
 				axios.get(
@@ -98,6 +104,7 @@ function App() {
 						"forecastData",
 						JSON.stringify(responses[1].data)
 					)
+					setLastQuery("myLocation")
 				})
 			)
 			.catch((error) => {
@@ -176,6 +183,7 @@ function App() {
 						handleLocationWeatherData={handleLocationWeatherData}
 						getCityWeatherData={getCityWeatherData}
 						query={query}
+						setLastQuery={setLastQuery}
 						setQuery={setQuery}
 						weatherData={weatherData}
 					/>
@@ -186,6 +194,7 @@ function App() {
 						handleLocationWeatherData={handleLocationWeatherData}
 						getCityWeatherData={getCityWeatherData}
 						query={query}
+						setLastQuery={setLastQuery}
 						setQuery={setQuery}
 					/>
 					<SpinningLogo />

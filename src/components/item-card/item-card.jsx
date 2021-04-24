@@ -4,7 +4,7 @@ import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCloud, faCloudRain } from "@fortawesome/free-solid-svg-icons"
 
-const StyledCard = styled.div`
+const StyledCard = styled.article`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -12,8 +12,8 @@ const StyledCard = styled.div`
 	border-radius: 4px;
 	box-shadow: var(--border-shadow);
 
+	margin: 0px;
 	padding: 8px;
-	margin: 8px;
 
 	transition: 0.2s ease;
 
@@ -25,13 +25,25 @@ const StyledCard = styled.div`
 	&:hover {
 		box-shadow: var(--small-shadow);
 	}
+	// Small devices (landscape phones, 576px and up)
+	@media (min-width: 576px) {
+		margin: 0;
+	}
 `
 
 const Row = styled.div`
 	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 
 	div {
-		margin: 0 2px;
+		margin: 2px;
+	}
+
+	// Small devices (landscape phones, 576px and up)
+	@media (min-width: 576px) {
+		flex-direction: row;
 	}
 `
 
@@ -46,7 +58,11 @@ const ItemCard = ({ iconURL, item, timeOrDate }) => {
 			<Row>
 				{item.clouds > 10 ? (
 					<div>
-						<FontAwesomeIcon icon={faCloud} title="Cloud coverage" />{" "}
+						<FontAwesomeIcon
+							icon={faCloud}
+							title="Cloud coverage"
+							aria-label="Cloud coverage"
+						/>{" "}
 						{item.clouds}%
 					</div>
 				) : (
@@ -56,6 +72,7 @@ const ItemCard = ({ iconURL, item, timeOrDate }) => {
 					<div>
 						<FontAwesomeIcon
 							icon={faCloudRain}
+							aria-label="Probability of precipitation"
 							title="Probability of precipitation"
 						/>{" "}
 						{item.pop}%

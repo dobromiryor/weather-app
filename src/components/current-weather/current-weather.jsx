@@ -3,9 +3,8 @@ import styled from "styled-components"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
-	faArrowAltCircleDown,
 	faBinoculars,
-	faMapMarked,
+	faMapMarkerAlt,
 	faClock,
 	faCloud,
 	faLongArrowAltDown,
@@ -20,12 +19,12 @@ import {
 	faWind,
 } from "@fortawesome/free-solid-svg-icons"
 
-const StyledContainer = styled.div`
+const StyledContainer = styled.section`
 	display: grid;
 	grid-template-columns: 1fr;
-	grid-template-rows: auto 1fr 1fr 1fr;
+	grid-template-rows: auto auto 1fr 1fr 1fr;
 
-	padding: 8px;
+	padding: 16px;
 	margin: 8px;
 
 	border-radius: 4px;
@@ -34,19 +33,19 @@ const StyledContainer = styled.div`
 	transition: 0.2s ease;
 
 	&:hover {
-		box-shadow: var(--small-shadow);
+		box-shadow: var(--mid-shadow);
 	}
 
 	// Small devices (landscape phones, 576px and up)
 	@media (min-width: 576px) {
 		grid-template-columns: 1fr 1fr;
-		grid-template-rows: auto 1fr 1fr;
+		grid-template-rows: auto auto 1fr 1fr;
 	}
 
 	// Large devices (desktops, 992px and up)
 	@media (min-width: 992px) {
 		grid-template-columns: 1fr 1fr;
-		grid-template-rows: auto 1fr 1fr;
+		grid-template-rows: auto auto 1fr 1fr;
 	}
 `
 
@@ -60,12 +59,14 @@ const StyledTopRow = styled.div`
 	}
 `
 
-const StyledCity = styled.span`
-	margin-left: 4px;
+const TopRowFlexContainer = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
 `
 
-const RightContainer = styled.div`
-	display: flex;
+const LocationName = styled.span`
+	margin: 0 0 0 4px;
 `
 
 const StyledRefreshButton = styled.div`
@@ -86,6 +87,16 @@ const StyledRefreshButton = styled.div`
 	opacity: ${(props) => (props.disabled ? "0.1" : "1")};
 	pointer-events: ${(props) => (props.disabled ? "none" : "auto")};
 	transform: ${(props) => (props.disabled ? "rotate(360deg)" : "rotate(0deg)")};
+`
+
+const StyledH3 = styled.h3`
+	margin: 0 0 16px 0;
+	justify-self: center;
+
+	// Small devices (landscape phones, 576px and up)
+	@media (min-width: 576px) {
+		grid-column: 1/3;
+	}
 `
 
 const StyledConditions = styled.div`
@@ -124,13 +135,6 @@ const StyledInfoCol = styled.div`
 
 	// Medium devices (tablets, 768px and up)
 	@media (min-width: 768px) {
-		justify-content: center;
-		align-items: initial;
-		min-width: 256px;
-	}
-
-	// Large devices (desktops, 992px and up)
-	@media (min-width: 992px) {
 		min-width: 256px;
 	}
 `
@@ -146,11 +150,30 @@ const CurrentWeather = ({
 	let popSum = 0
 	let minTempArray = []
 	let maxTempArray = []
+	let direction = ""
 
 	for (let i = 0; i < daysArray[0].length; i++) {
 		popSum += daysArray[0][i].pop
 		minTempArray.push(daysArray[0][i].main.temp_min)
 		maxTempArray.push(daysArray[0][i].main.temp_max)
+	}
+
+	if (weatherData.wind.deg < 22.5 && weatherData.wind.deg > 337.5) {
+		direction = "N"
+	} else if (weatherData.wind.deg < 67.5 && weatherData.wind.deg > 22.5) {
+		direction = "NE"
+	} else if (weatherData.wind.deg < 112.5 && weatherData.wind.deg > 67.5) {
+		direction = "E"
+	} else if (weatherData.wind.deg < 157.5 && weatherData.wind.deg > 112.5) {
+		direction = "SE"
+	} else if (weatherData.wind.deg < 202.5 && weatherData.wind.deg > 157.5) {
+		direction = "S"
+	} else if (weatherData.wind.deg < 247.5 && weatherData.wind.deg > 202.5) {
+		direction = "SW"
+	} else if (weatherData.wind.deg < 292.5 && weatherData.wind.deg > 247.5) {
+		direction = "W"
+	} else if (weatherData.wind.deg < 337.5 && weatherData.wind.deg > 292.5) {
+		direction = "NW"
 	}
 
 	let item = {
@@ -173,30 +196,44 @@ const CurrentWeather = ({
 		visibility: Math.floor(weatherData.visibility / 1000),
 		windSpeed: weatherData.wind.speed,
 		windDeg: weatherData.wind.deg,
+		windDir: direction,
 	}
 
 	return (
 		<StyledContainer>
+			<StyledH3>Current weather</StyledH3>
 			<StyledTopRow>
-				<div>
-					<FontAwesomeIcon icon={faMapMarked} title="Location" />
-					<StyledCity>
-						{weatherData.name},{weatherData.sys.country}
-					</StyledCity>
-				</div>
-				<RightContainer title={forceRefetch ? "Next refresh in 5 min" : ""}>
+				<TopRowFlexContainer>
+					<FontAwesomeIcon
+						icon={faMapMarkerAlt}
+						title="Current location"
+						aria-label="Current location"
+					/>
+					<LocationName>
+						{weatherData.name}, {weatherData.sys.country}
+					</LocationName>
+				</TopRowFlexContainer>
+				<TopRowFlexContainer
+					title={forceRefetch ? "Next refresh in 5 min" : ""}
+					aria-label={forceRefetch ? "Next refresh in 5 min" : ""}
+				>
 					<div>
-						<FontAwesomeIcon icon={faClock} title="Last updated" />{" "}
+						<FontAwesomeIcon
+							icon={faClock}
+							title="Last updated"
+							aria-label="Last updated"
+						/>{" "}
 						{convertTime(weatherData.dt)}
 					</div>
 					<StyledRefreshButton
 						onClick={forceRefresh}
 						disabled={forceRefetch ? true : false}
 						title="Refresh"
+						aria-label="Refresh"
 					>
 						<FontAwesomeIcon icon={faSyncAlt} />
 					</StyledRefreshButton>
-				</RightContainer>
+				</TopRowFlexContainer>
 			</StyledTopRow>
 			<StyledConditions>
 				<img src={`${iconURL}/${item.image}@2x.png`} alt={item.description} />
@@ -206,59 +243,100 @@ const CurrentWeather = ({
 			</StyledConditions>
 			<StyledInfoCol>
 				<div>
-					<FontAwesomeIcon icon={faTemperatureLow} title="Low" /> {item.tempMin}
-					° / <FontAwesomeIcon icon={faTemperatureHigh} title="High" />{" "}
+					<FontAwesomeIcon
+						icon={faTemperatureLow}
+						title="Minimum Temperature"
+						aria-label="Minimum Temperature"
+					/>{" "}
+					{item.tempMin}°{" "}
+					<FontAwesomeIcon
+						icon={faTemperatureHigh}
+						title="Max Temperature"
+						aria-label="Max Temperature"
+					/>{" "}
 					{item.tempMax}°
 				</div>
 				<div>
-					<FontAwesomeIcon icon={faThermometerHalf} title="Feels like" /> Feels
-					like {item.feelsLike}°
+					<FontAwesomeIcon
+						icon={faThermometerHalf}
+						aria-hidden="true"
+						title="Feels like"
+						aria-label="Feels like"
+					/>{" "}
+					Feels like {item.feelsLike}°
 				</div>
 				<div>
-					<FontAwesomeIcon icon={faCloud} title="Cloud coverage" /> Cloud
-					coverage: {item.clouds}%
+					<FontAwesomeIcon
+						icon={faCloud}
+						aria-hidden="true"
+						title="Cloud coverage"
+						aria-label="Cloud coverage"
+					/>{" "}
+					Cloud coverage: {item.clouds}%
 				</div>
 				<div>
 					<FontAwesomeIcon
 						icon={faUmbrella}
+						aria-hidden="true"
 						title="Probability of precipitation"
+						aria-label="Probability of precipitation"
 					/>{" "}
 					Precipitation: {item.pop}%
 				</div>
 				<div>
-					<FontAwesomeIcon icon={faTint} title="Humidity" /> Humidity:{" "}
-					{item.humidity}%
+					<FontAwesomeIcon
+						icon={faTint}
+						aria-hidden="true"
+						title="Humidity"
+						aria-label="Humidity"
+					/>{" "}
+					Humidity: {item.humidity}%
 				</div>
 			</StyledInfoCol>
 			<StyledInfoCol>
 				<div>
 					<FontAwesomeIcon
 						icon={faLongArrowAltDown}
+						aria-hidden="true"
 						title="Atmospheric pressure"
+						aria-label="Atmospheric pressure"
 					/>{" "}
 					Pressure: {item.pressure}hPa
 				</div>
 				<div>
-					<FontAwesomeIcon icon={faBinoculars} title="Visibility" /> Visibility:{" "}
-					{item.visibility}km
+					<FontAwesomeIcon
+						icon={faBinoculars}
+						aria-hidden="true"
+						title="Visibility"
+						aria-label="Visibility"
+					/>{" "}
+					Visibility: {item.visibility}km
 				</div>
 				<div>
-					<FontAwesomeIcon icon={faWind} title="Wind speed/direction" /> Wind:{" "}
-					{item.windSpeed}
+					<FontAwesomeIcon
+						icon={faWind}
+						aria-hidden="true"
+						title="Wind speed/direction"
+						aria-label="Wind speed/direction"
+					/>{" "}
+					Wind: {item.windSpeed}
 					m/s{" "}
 					<FontAwesomeIcon
-						icon={faArrowAltCircleDown}
+						icon={faLongArrowAltDown}
 						transform={{ rotate: item.windDeg }}
-						title="Wind direction"
-					/>
+						aria-hidden="true"
+						title="Direction"
+						aria-label="Direction"
+					/>{" "}
+					{item.windDeg}° ({item.windDir})
 				</div>
 				<div>
-					<FontAwesomeIcon icon={faSun} title="Sunrise" /> Sunrise:{" "}
-					{convertTime(item.sunrise)}
+					<FontAwesomeIcon icon={faSun} title="Sunrise" aria-label="Sunrise" />{" "}
+					Sunrise: {convertTime(item.sunrise)}
 				</div>
 				<div>
-					<FontAwesomeIcon icon={faMoon} title="Sunset" /> Sunset:{" "}
-					{convertTime(item.sunset)}
+					<FontAwesomeIcon icon={faMoon} title="Sunset" aria-label="Sunset" />{" "}
+					Sunset: {convertTime(item.sunset)}
 				</div>
 			</StyledInfoCol>
 		</StyledContainer>

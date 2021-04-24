@@ -14,6 +14,7 @@ const WeatherCard = ({
 	handleLocationWeatherData,
 	getCityWeatherData,
 	query,
+	setLastQuery,
 	setQuery,
 	weatherData,
 }) => {
@@ -42,6 +43,7 @@ const WeatherCard = ({
 				handleLocationWeatherData={handleLocationWeatherData}
 				getCityWeatherData={getCityWeatherData}
 				query={query}
+				setLastQuery={setLastQuery}
 				setQuery={setQuery}
 			/>
 			<CurrentWeather
