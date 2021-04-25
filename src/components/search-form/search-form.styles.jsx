@@ -9,6 +9,7 @@ export const SearchFormContainer = styled.form`
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+	justify-self: flex-start;
 
 	margin: 8px;
 	padding: 16px;

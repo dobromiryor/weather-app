@@ -74,17 +74,26 @@ export const StyledContainer = styled.div`
 
 	display: flex;
 	flex-direction: column;
+	justify-content: center;
 
 	width: 100%;
+	height: 100vh;
 
 	border-radius: 8px;
 	box-shadow: var(--big-shadow);
 
 	transition: 0.2s ease;
 
+	&.loaded {
+		height: initial;
+		max-height: initial;
+	}
+
 	// Small devices (landscape phones, 576px and up)
 	@media (min-width: 576px) {
 		margin: 32px;
+		height: calc(100vh - 2 * 32px);
+		max-height: 980px;
 	}
 
 	// Medium devices (tablets, 768px and up)

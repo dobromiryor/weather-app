@@ -3,32 +3,55 @@ import styled from "styled-components"
 
 import { ReactComponent as Logo } from "./logo.svg"
 
-const StyledLogo = styled(Logo)`
-	max-width: 512px;
+const ScalingContainer = styled.div`
+	animation: scale 2s infinite alternate ease-in-out;
+	margin: auto 0;
 
+	@keyframes scale {
+		0% {
+			transform: scale(0.7);
+		}
+		100% {
+			transform: scale(0.5);
+		}
+	}
+`
+
+const StyledLogo = styled(Logo)`
 	align-self: center;
 	justify-self: center;
 
-	animation: rotation 3s infinite ease-in-out;
-	animation-direction: alternate;
+	animation: rotate 4s infinite alternate ease-in-out;
 
-	@keyframes rotation {
-		from {
-			transform: rotate(0deg) scale(0.7);
+	@keyframes rotate {
+		0% {
+			transform: rotate(0deg);
 		}
-		to {
-			transform: rotate(180deg) scale(0.6);
+		100% {
+			transform: rotate(180deg);
 		}
 	}
 
-	// Small devices (landscape phones, 576px and up)
-	@media (min-width: 576px) {
-		max-width: 702px;
+	& .fill {
+		animation: fade 2s alternate infinite ease-in-out;
+
+		@keyframes fade {
+			0% {
+				fill: #ffcc33;
+			}
+			100% {
+				fill: #fc9601;
+			}
+		}
 	}
 `
 
 const SpinningLogo = () => {
-	return <StyledLogo title="Spinning Logo" />
+	return (
+		<ScalingContainer>
+			<StyledLogo title="Spinning Logo" />
+		</ScalingContainer>
+	)
 }
 
 export default SpinningLogo

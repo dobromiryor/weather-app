@@ -173,7 +173,7 @@ function App() {
 		<>
 			<GlobalStyle />
 			{weatherData.cod === 200 && forecastData.cod === "200" ? (
-				<StyledContainer>
+				<StyledContainer className="loaded">
 					<WeatherCard
 						convertDate={convertDate}
 						convertTime={convertTime}

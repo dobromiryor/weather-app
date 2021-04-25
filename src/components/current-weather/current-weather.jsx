@@ -1,5 +1,4 @@
 import React from "react"
-import styled from "styled-components"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
@@ -8,7 +7,7 @@ import {
 	faClock,
 	faCloud,
 	faLongArrowAltDown,
-	faMoon,
+	faLongArrowAltUp,
 	faSun,
 	faSyncAlt,
 	faTemperatureLow,
@@ -19,125 +18,17 @@ import {
 	faWind,
 } from "@fortawesome/free-solid-svg-icons"
 
-const StyledContainer = styled.section`
-	display: grid;
-	grid-template-columns: 1fr;
-	grid-template-rows: auto auto 1fr 1fr 1fr;
-
-	padding: 16px;
-	margin: 8px;
-
-	border-radius: 4px;
-	box-shadow: var(--border-shadow);
-
-	transition: 0.2s ease;
-
-	&:hover {
-		box-shadow: var(--mid-shadow);
-	}
-
-	// Small devices (landscape phones, 576px and up)
-	@media (min-width: 576px) {
-		grid-template-columns: 1fr 1fr;
-		grid-template-rows: auto auto 1fr 1fr;
-	}
-
-	// Large devices (desktops, 992px and up)
-	@media (min-width: 992px) {
-		grid-template-columns: 1fr 1fr;
-		grid-template-rows: auto auto 1fr 1fr;
-	}
-`
-
-const StyledTopRow = styled.div`
-	display: flex;
-	justify-content: space-between;
-
-	// Small devices (landscape phones, 576px and up)
-	@media (min-width: 576px) {
-		grid-column: span 2;
-	}
-`
-
-const TopRowFlexContainer = styled.div`
-	display: flex;
-	justify-content: center;
-	align-items: center;
-`
-
-const LocationName = styled.span`
-	margin: 0 0 0 4px;
-`
-
-const StyledRefreshButton = styled.div`
-	height: fit-content;
-
-	margin: 0 0 0 8px;
-	padding: 0;
-
-	border: none;
-	background: none;
-	color: var(--text);
-	font-size: 1em;
-
-	cursor: pointer;
-	pointer-events: initial;
-	transition: 1s ease-in-out;
-
-	opacity: ${(props) => (props.disabled ? "0.1" : "1")};
-	pointer-events: ${(props) => (props.disabled ? "none" : "auto")};
-	transform: ${(props) => (props.disabled ? "rotate(360deg)" : "rotate(0deg)")};
-`
-
-const StyledH3 = styled.h3`
-	margin: 0 0 16px 0;
-	justify-self: center;
-
-	// Small devices (landscape phones, 576px and up)
-	@media (min-width: 576px) {
-		grid-column: 1/3;
-	}
-`
-
-const StyledConditions = styled.div`
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: center;
-
-	// Small devices (landscape phones, 576px and up)
-	@media (min-width: 576px) {
-		grid-column: span 2;
-	}
-
-	// Large devices (desktops, 992px and up)
-	@media (min-width: 992px) {
-		grid-column: span 2;
-	}
-`
-
-const StyledTemp = styled.div`
-	display: flex;
-	justify-content: center;
-	align-items: center;
-
-	font-size: 6rem;
-	font-weight: 700;
-`
-
-const StyledInfoCol = styled.div`
-	justify-self: stretch;
-
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-
-	// Medium devices (tablets, 768px and up)
-	@media (min-width: 768px) {
-		min-width: 256px;
-	}
-`
+import {
+	StyledContainer,
+	StyledTopRow,
+	TopRowFlexContainer,
+	LocationName,
+	StyledRefreshButton,
+	StyledH3,
+	StyledConditions,
+	StyledTemp,
+	StyledInfoCol,
+} from "./current-weather.styles"
 
 const CurrentWeather = ({
 	convertTime,
@@ -331,11 +222,33 @@ const CurrentWeather = ({
 					{item.windDeg}° ({item.windDir})
 				</div>
 				<div>
-					<FontAwesomeIcon icon={faSun} title="Sunrise" aria-label="Sunrise" />{" "}
+					<FontAwesomeIcon
+						icon={faSun}
+						aria-hidden="true"
+						title="Sunrise"
+						aria-label="Sunrise"
+					/>
+					<FontAwesomeIcon
+						icon={faLongArrowAltUp}
+						aria-hidden="true"
+						title="Sunrise"
+						aria-label="Sunrise"
+					/>{" "}
 					Sunrise: {convertTime(item.sunrise)}
 				</div>
 				<div>
-					<FontAwesomeIcon icon={faMoon} title="Sunset" aria-label="Sunset" />{" "}
+					<FontAwesomeIcon
+						icon={faSun}
+						aria-hidden="true"
+						title="Sunset"
+						aria-label="Sunset"
+					/>
+					<FontAwesomeIcon
+						icon={faLongArrowAltDown}
+						aria-hidden="true"
+						title="Sunset"
+						aria-label="Sunset"
+					/>{" "}
 					Sunset: {convertTime(item.sunset)}
 				</div>
 			</StyledInfoCol>
