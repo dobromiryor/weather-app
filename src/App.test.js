@@ -3,6 +3,6 @@ import App from "./App"
 
 test("renders search city label", () => {
 	render(<App />)
-	const labelElement = screen.getByText(/search city/i)
+	const labelElement = screen.getByText(/enter city name/i)
 	expect(labelElement).toBeInTheDocument()
 })

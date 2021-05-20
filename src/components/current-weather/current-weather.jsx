@@ -139,13 +139,13 @@ const CurrentWeather = ({
 						title="Minimum Temperature"
 						aria-label="Minimum Temperature"
 					/>{" "}
-					{item.tempMin}°{" "}
+					<span>{item.tempMin}° </span>
 					<FontAwesomeIcon
 						icon={faTemperatureHigh}
 						title="Max Temperature"
 						aria-label="Max Temperature"
 					/>{" "}
-					{item.tempMax}°
+					<span>{item.tempMax}°</span>
 				</div>
 				<div>
 					<FontAwesomeIcon
@@ -154,7 +154,7 @@ const CurrentWeather = ({
 						title="Feels like"
 						aria-label="Feels like"
 					/>{" "}
-					Feels like {item.feelsLike}°
+					<span>Feels like {item.feelsLike}°</span>
 				</div>
 				<div>
 					<FontAwesomeIcon
@@ -163,7 +163,8 @@ const CurrentWeather = ({
 						title="Cloud coverage"
 						aria-label="Cloud coverage"
 					/>{" "}
-					Cloud coverage: {item.clouds}%
+					<span>Cloud coverage: </span>
+					<span>{item.clouds}%</span>
 				</div>
 				<div>
 					<FontAwesomeIcon
@@ -172,7 +173,8 @@ const CurrentWeather = ({
 						title="Probability of precipitation"
 						aria-label="Probability of precipitation"
 					/>{" "}
-					Precipitation: {item.pop}%
+					<span>Precipitation: </span>
+					<span>{item.pop}%</span>
 				</div>
 				<div>
 					<FontAwesomeIcon
@@ -181,7 +183,8 @@ const CurrentWeather = ({
 						title="Humidity"
 						aria-label="Humidity"
 					/>{" "}
-					Humidity: {item.humidity}%
+					<span>Humidity: </span>
+					<span>{item.humidity}%</span>
 				</div>
 			</StyledInfoCol>
 			<StyledInfoCol>
@@ -192,7 +195,8 @@ const CurrentWeather = ({
 						title="Atmospheric pressure"
 						aria-label="Atmospheric pressure"
 					/>{" "}
-					Pressure: {item.pressure}hPa
+					<span>Pressure: </span>
+					<span>{item.pressure} hPa</span>
 				</div>
 				<div>
 					<FontAwesomeIcon
@@ -201,7 +205,8 @@ const CurrentWeather = ({
 						title="Visibility"
 						aria-label="Visibility"
 					/>{" "}
-					Visibility: {item.visibility}km
+					<span>Visibility: </span>
+					<span>{item.visibility} km</span>
 				</div>
 				<div>
 					<FontAwesomeIcon
@@ -210,8 +215,8 @@ const CurrentWeather = ({
 						title="Wind speed/direction"
 						aria-label="Wind speed/direction"
 					/>{" "}
-					Wind: {item.windSpeed}
-					m/s{" "}
+					<span>Wind: </span>
+					<span>{item.windSpeed} m/s</span>{" "}
 					<FontAwesomeIcon
 						icon={faLongArrowAltDown}
 						transform={{ rotate: item.windDeg }}
@@ -219,7 +224,8 @@ const CurrentWeather = ({
 						title="Direction"
 						aria-label="Direction"
 					/>{" "}
-					{item.windDeg}° ({item.windDir})
+					<span>{item.windDeg}° </span>
+					<span>({item.windDir})</span>
 				</div>
 				<div>
 					<FontAwesomeIcon
@@ -234,7 +240,8 @@ const CurrentWeather = ({
 						title="Sunrise"
 						aria-label="Sunrise"
 					/>{" "}
-					Sunrise: {convertTime(item.sunrise)}
+					<span>Sunrise: </span>
+					<span>{convertTime(item.sunrise)}</span>
 				</div>
 				<div>
 					<FontAwesomeIcon
@@ -249,7 +256,8 @@ const CurrentWeather = ({
 						title="Sunset"
 						aria-label="Sunset"
 					/>{" "}
-					Sunset: {convertTime(item.sunset)}
+					<span>Sunset: </span>
+					<span>{convertTime(item.sunset)}</span>
 				</div>
 			</StyledInfoCol>
 		</StyledContainer>

@@ -39,10 +39,6 @@ export const SearchFormContainer = styled.form`
 		font-size: 1em;
 
 		cursor: pointer;
-
-		&:focus {
-			outline: none;
-		}
 	}
 `
 
@@ -89,7 +85,6 @@ export const StyledInput = styled.input`
 
 	&:hover,
 	&:focus {
-		outline: none;
 		border-top: 1px solid var(--background);
 		border-bottom: 1px solid var(--text);
 	}

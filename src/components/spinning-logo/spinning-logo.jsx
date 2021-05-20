@@ -4,15 +4,19 @@ import styled from "styled-components"
 import { ReactComponent as Logo } from "./logo.svg"
 
 const ScalingContainer = styled.div`
-	animation: scale 2s infinite alternate ease-in-out;
+	display: flex;
+	justify-content: center;
+
+	height: 100%;
 	margin: auto 0;
+	animation: scale 2s infinite alternate ease-in-out;
 
 	@keyframes scale {
 		0% {
-			transform: scale(0.7);
+			transform: scale(1);
 		}
 		100% {
-			transform: scale(0.5);
+			transform: scale(0.9);
 		}
 	}
 `
@@ -20,6 +24,9 @@ const ScalingContainer = styled.div`
 const StyledLogo = styled(Logo)`
 	align-self: center;
 	justify-self: center;
+
+	height: 256px;
+	width: 256px;
 
 	animation: rotate 4s infinite alternate ease-in-out;
 
@@ -49,7 +56,7 @@ const StyledLogo = styled(Logo)`
 const SpinningLogo = () => {
 	return (
 		<ScalingContainer>
-			<StyledLogo title="Spinning Logo" />
+			<StyledLogo title="" aria-hidden="true" />
 		</ScalingContainer>
 	)
 }
